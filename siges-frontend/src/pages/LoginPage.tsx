@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../services/api'; // Import the configured axios instance
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
         localStorage.setItem('refreshToken', response.data.refresh);
         // Update apiClient default Authorization header for subsequent requests in this session
         apiClient.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
-        navigate('/dashboard');
+        if (onLoginSuccess) onLoginSuccess(); navigate('/dashboard');
       }
     } catch (err: any) {
       console.error('Login failed:', err);

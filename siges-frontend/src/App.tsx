@@ -4,36 +4,33 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import SchoolsPage from './pages/SchoolsPage'; // Import the new page
 import ProtectedRoute from './components/ProtectedRoute';
 import apiClient from './services/api';
 
 function App() {
   const navigate = useNavigate();
-  // Check for token presence to update UI dynamically.
-  // Note: This is a simple check. For robust auth, consider context or state management.
   const [isAuthenticated, setIsAuthenticated] = React.useState(!!localStorage.getItem('accessToken'));
-
-  React.useEffect(() => {
-    // Listen to storage changes to update auth state (e.g., if token is removed by another tab)
-    const handleStorageChange = () => {
-      setIsAuthenticated(!!localStorage.getItem('accessToken'));
-    };
-    window.addEventListener('storage', handleStorageChange);
-    // Initial check
-    setIsAuthenticated(!!localStorage.getItem('accessToken'));
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     delete apiClient.defaults.headers['Authorization'];
-    setIsAuthenticated(false); // Update state
+    setIsAuthenticated(false);
     navigate('/login');
   };
+
+  React.useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(!!localStorage.getItem('accessToken'));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    // Initial check in case the component mounts after login/logout
+    setIsAuthenticated(!!localStorage.getItem('accessToken'));
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   return (
     <div>
@@ -48,16 +45,23 @@ function App() {
           ) : (
             <li><button onClick={handleLogout}>Logout</button></li>
           )}
-          {isAuthenticated && <li><Link to="/dashboard">Dashboard</Link></li>}
+          {isAuthenticated && (
+            <>
+              <li><Link to="/dashboard">Dashboard</Link></li>
+              <li><Link to="/schools">Schools</Link></li> {/* New link */}
+            </>
+          )}
         </ul>
       </nav>
       <hr />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} /> {/* Consider passing setIsAuthenticated to LoginPage */}
+        <Route path="/login" element={<LoginPage onLoginSuccess={() => setIsAuthenticated(true)} />} />
         <Route path="/register" element={<RegisterPage />} />
+
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/schools" element={<SchoolsPage />} /> {/* New protected route */}
         </Route>
       </Routes>
     </div>
