@@ -3,9 +3,9 @@ import apiClient from '../services/api';
 import { School } from '../pages/SchoolsPage'; // Import the shared type
 
 interface SchoolFormProps {
-  schoolToEdit?: School | null;
+  schoolToEdit?: School | null; 
   onSchoolCreated: (school: School) => void;
-  onCancel?: () => void;
+  onCancel?: () => void; 
 }
 
 // For creation, some fields of School are optional (like id)
@@ -25,10 +25,10 @@ const SchoolForm: React.FC<SchoolFormProps> = ({ schoolToEdit, onSchoolCreated, 
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [contactInfo, setContactInfo] = useState('');
-  const [directorId, setDirectorId] = useState<string>('');
+  const [directorId, setDirectorId] = useState<string>(''); 
   const [logoUrl, setLogoUrl] = useState('');
   const [isActive, setIsActive] = useState(true);
-
+  
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -75,7 +75,7 @@ const SchoolForm: React.FC<SchoolFormProps> = ({ schoolToEdit, onSchoolCreated, 
         // Create logic
         response = await apiClient.post<School>('/schools/', schoolData);
       }
-      onSchoolCreated(response.data);
+      onSchoolCreated(response.data); 
       if (!schoolToEdit) { // Reset form only on creation
         setName('');
         setAddress('');

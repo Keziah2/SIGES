@@ -13,7 +13,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'first_name': {'required': False, 'allow_blank': True},
             'last_name': {'required': False, 'allow_blank': True},
-            'role': {'required': False}
+            'role': {'required': False} 
         }
 
     def validate_email(self, value):
@@ -25,14 +25,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if CustomUser.objects.filter(username=value).exists():
             raise serializers.ValidationError("User with this username already exists.")
         return value
-
+        
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
 
     def create(self, validated_data):
-        validated_data.pop('password2')
+        validated_data.pop('password2') 
         # Ensure email is passed to create_user as it's the USERNAME_FIELD
         user = CustomUser.objects.create_user(
             username=validated_data['username'],

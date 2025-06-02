@@ -16,7 +16,7 @@ function App() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     delete apiClient.defaults.headers['Authorization'];
-    setIsAuthenticated(false);
+    setIsAuthenticated(false); 
     navigate('/login');
   };
 
@@ -58,7 +58,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage onLoginSuccess={() => setIsAuthenticated(true)} />} />
         <Route path="/register" element={<RegisterPage />} />
-
+        
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/schools" element={<SchoolsPage />} /> {/* New protected route */}

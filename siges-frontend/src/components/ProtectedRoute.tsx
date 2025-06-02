@@ -12,7 +12,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = () => {
     return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />;
+  return <Outlet />; 
 };
 
 export default ProtectedRoute;

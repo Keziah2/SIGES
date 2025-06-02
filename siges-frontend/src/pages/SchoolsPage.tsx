@@ -1,24 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import apiClient from '../services/api';
-import SchoolListItem from '../components/SchoolListItem'; // Ensure it is used
-import SchoolForm from '../components/SchoolForm';
+import { School, Level, SchoolClass } from '../types/models'; // Import shared types
 
-// Define the School type more precisely, according to the backend
-export interface School { // Export to use in SchoolForm and SchoolListItem
-  id: number;
-  name: string;
-  address: string;
-  contact_info?: string | null;
-  director?: number | null; // Director's user ID
-  logo_url?: string | null;
-  is_active: boolean;
-}
+import SchoolListItem from '../components/SchoolListItem';
+import SchoolForm from '../components/SchoolForm';
+import LevelsManagement from '../components/LevelsManagement'; // New component
 
 const SchoolsPage: React.FC = () => {
   const [schools, setSchools] = useState<School[]>([]);
+  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState(false);
+  const [showSchoolForm, setShowSchoolForm] = useState(false);
 
   const fetchSchools = useCallback(async () => {
     setIsLoading(true);
@@ -39,36 +32,50 @@ const SchoolsPage: React.FC = () => {
   }, [fetchSchools]);
 
   const handleSchoolCreated = (newSchool: School) => {
-    // Either add to the existing list or refresh the entire list
-    // For simplicity, let's refresh the entire list for now
-    fetchSchools();
-    setShowForm(false); // Hide the form after creation
+    fetchSchools(); // Refresh the list
+    setShowSchoolForm(false);
   };
 
-  const handleCancelForm = () => {
-    setShowForm(false);
+  const handleSelectSchool = (school: School) => {
+    setSelectedSchool(school);
   };
+  
+  const handleBackToList = () => {
+    setSelectedSchool(null);
+  }
 
   if (isLoading && schools.length === 0) return <p>Loading schools...</p>;
-  if (error && schools.length === 0) return <p style={{ color: 'red' }}>{error}</p>; // Show error prominently if list is empty
+  if (error && !selectedSchool) return <p style={{ color: 'red' }}>{error}</p>; 
+
+  if (selectedSchool) {
+    return (
+      <div>
+        <button onClick={handleBackToList} style={{ marginBottom: '15px' }}>&larr; Back to Schools List</button>
+        <h2>Managing School: {selectedSchool.name}</h2>
+        <p><strong>Address:</strong> {selectedSchool.address}</p>
+        {selectedSchool.contact_info && <p><strong>Contact:</strong> {selectedSchool.contact_info}</p>}
+        <LevelsManagement school={selectedSchool} />
+      </div>
+    );
+  }
 
   return (
     <div>
       <h1>Schools Management</h1>
-      {/* TODO: Conditionally display this button based on user roles (e.g., SuperAdmin) */}
-      <button onClick={() => setShowForm(!showForm)}>
-        {showForm ? 'Cancel' : 'Add New School'}
+      <button onClick={() => setShowSchoolForm(!showSchoolForm)}>
+        {showSchoolForm ? 'Cancel Add School' : 'Add New School'}
       </button>
 
-      {showForm && <SchoolForm onSchoolCreated={handleSchoolCreated} onCancel={handleCancelForm} />}
+      {showSchoolForm && <SchoolForm onSchoolCreated={handleSchoolCreated} onCancel={() => setShowSchoolForm(false)} />}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Show error even if list is partially loaded */}
       <h2>Schools List</h2>
       {schools.length === 0 && !isLoading && <p>No schools found. Add one!</p>}
-      {isLoading && schools.length > 0 && <p>Updating list...</p>} {/* Indicate loading when refreshing */}
-      <ul style={{ paddingLeft: 0 }}> {/* Remove default ul padding */}
+      {isLoading && schools.length > 0 && <p>Updating list...</p>}
+      <ul style={{ paddingLeft: 0 }}>
         {schools.map(school => (
-          <SchoolListItem key={school.id} school={school} />
+          <div key={school.id} onClick={() => handleSelectSchool(school)} style={{cursor: 'pointer'}}>
+            <SchoolListItem school={school} />
+          </div>
         ))}
       </ul>
     </div>

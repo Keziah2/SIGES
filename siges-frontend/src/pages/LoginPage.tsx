@@ -13,7 +13,7 @@ const LoginPage: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess })
     setError(null);
     try {
       const response = await apiClient.post('/token/', {
-        email: email,
+        email: email, 
         password: password,
       });
       if (response.data.access) {
@@ -21,7 +21,7 @@ const LoginPage: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess })
         localStorage.setItem('refreshToken', response.data.refresh);
         // Update apiClient default Authorization header for subsequent requests in this session
         apiClient.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
-        if (onLoginSuccess) onLoginSuccess(); navigate('/dashboard');
+        if (onLoginSuccess) onLoginSuccess(); navigate('/dashboard'); 
       }
     } catch (err: any) {
       console.error('Login failed:', err);
