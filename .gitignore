@@ -1,0 +1,82 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.egg
+instance/
+db.sqlite3
+db.sqlite3-journal
+/static_collected/
+/media/
+
+# Environnements virtuels
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# IDE / Éditeurs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Node.js (pour le frontend ou si des outils node sont utilisés)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json # Si vous préférez que seul yarn.lock ou pnpm-lock.yaml soit commit
+# dist/ # Pourrait être spécifique au frontend, à évaluer si on le met ici ou dans le .gitignore du frontend
+# .angular/ # Si Angular était utilisé
+
+# Fichiers de build Python
+build/
+develop-eggs/
+dist/ # Conflit potentiel avec dist du frontend, à gérer
+downloads/
+eggs/
+.eggs/
+lib/
+lib60/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.manifest
+*.spec
+
+# Cache pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Fichiers sensibles
+*.local
+secrets.py # Exemple, si vous avez un tel fichier pour les secrets locaux
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Fichiers compilés spécifiques OS
+*.dll
+*.exe
