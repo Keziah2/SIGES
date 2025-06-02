@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+'students.apps.StudentsConfig',
     'rest_framework_simplejwt', # For JWT authentication
     # 'rest_framework.authtoken', # Can be removed if only SimpleJWT is used for token auth
     'rest_framework',           # Django REST framework

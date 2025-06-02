@@ -4,7 +4,8 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
-import SchoolsPage from './pages/SchoolsPage'; // Import the new page
+import SchoolsPage from './pages/SchoolsPage';
+import StudentsPage from './pages/StudentsPage'; // Import the new page
 import ProtectedRoute from './components/ProtectedRoute';
 import apiClient from './services/api';
 
@@ -49,6 +50,7 @@ function App() {
             <>
               <li><Link to="/dashboard">Dashboard</Link></li>
               <li><Link to="/schools">Schools</Link></li> {/* New link */}
+              <li><Link to="/students">Students</Link></li>
             </>
           )}
         </ul>
@@ -62,6 +64,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/schools" element={<SchoolsPage />} /> {/* New protected route */}
+          <Route path="/students" element={<StudentsPage />} />
         </Route>
       </Routes>
     </div>
